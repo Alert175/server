@@ -6,9 +6,13 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const infoRouter = require('./routes/info');
+const mainRouter = require('./routes/main');
+const newsRouter = require('./routes/news');
+const objectsRouter = require('./routes/objects');
+const stocksRouter = require('./routes/stocks');
+const authRouter = require('./routes/auth');
+const corpRouter = require('./routes/corp');
+const reviewsRouter = require('./routes/reviews');
 
 const app = express();
 
@@ -21,7 +25,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json({limit: '200KB'}));
+app.use('corp/commercial', (req, res)=>{
+	console.log('asdasd');
+	next();
+});
+app.use(bodyParser.json({limit: '10Mb'}));
 
 /* CORS */
 const white_list = ['http://localhost:8080'];
@@ -36,9 +44,13 @@ app.use((req, res, next)=>{
 	next();
 });
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/info', infoRouter);
+app.use('/main', mainRouter);
+app.use('/news', newsRouter);
+app.use('/stocks', stocksRouter);
+app.use('/info', objectsRouter);
+app.use('/auth', authRouter);
+app.use('/corp', corpRouter);
+app.use('/reviews', reviewsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
